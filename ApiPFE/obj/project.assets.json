@@ -8718,11 +8718,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\repos\\ApiPFE\\ApiPFE\\ApiPFE.csproj",
+      "projectUniqueName": "E:\\Studies\\Project\\Projet PFE\\ApiPFE\\ApiPFE\\ApiPFE.csproj",
       "projectName": "ApiPFE",
-      "projectPath": "E:\\repos\\ApiPFE\\ApiPFE\\ApiPFE.csproj",
+      "projectPath": "E:\\Studies\\Project\\Projet PFE\\ApiPFE\\ApiPFE\\ApiPFE.csproj",
       "packagesPath": "C:\\Users\\Maale\\.nuget\\packages\\",
-      "outputPath": "E:\\repos\\ApiPFE\\ApiPFE\\obj\\",
+      "outputPath": "E:\\Studies\\Project\\Projet PFE\\ApiPFE\\ApiPFE\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\"
