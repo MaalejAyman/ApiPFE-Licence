@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiPFE.Models;
+using Microsoft.Data.SqlClient;
 
 namespace ApiPFE.Controllers
 {
@@ -28,17 +29,16 @@ namespace ApiPFE.Controllers
         }
 
         // GET: api/Users/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(long id)
+        [HttpGet("{login}")]
+        public ActionResult<User> GetUser(string login)
         {
-            var user = await _context.Users.FindAsync(id);
-
-            if (user == null)
+            var us = _context.Users.Where(u => u.login == login).ToList().First();
+            if (us == null)
             {
                 return NotFound();
             }
 
-            return user;
+            return us;
         }
 
         // PUT: api/Users/5
@@ -105,5 +105,21 @@ namespace ApiPFE.Controllers
         {
             return _context.Users.Any(e => e.Id == id);
         }
+
+        /* [Route("login")]
+         [HttpGet]
+         // GET: api/Users/login/test
+         private async Task<User> getUser(String login)
+         {
+             try
+             {
+                 var us = await _context.Users.Where(u => u.login == login).FirstAsync();
+                 return us;
+             }
+             catch (ArgumentNullException)
+             {
+                 return null;
+             }
+         }*/
     }
 }
