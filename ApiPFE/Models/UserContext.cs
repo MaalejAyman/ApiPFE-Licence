@@ -12,6 +12,6 @@ namespace ApiPFE.Models
             : base(options)
         {
         }
-        public DbSet<User> Users { get; set; }
+        public DbSet<User> Userss { get; set; }
     }
 }

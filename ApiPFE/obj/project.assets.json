@@ -2,6 +2,18 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v3.1": {
+      "IdentityServer3/2.6.3": {
+        "type": "package",
+        "dependencies": {
+          "Owin": "1.0.0"
+        },
+        "compile": {
+          "lib/net45/IdentityServer3.dll": {}
+        },
+        "runtime": {
+          "lib/net45/IdentityServer3.dll": {}
+        }
+      },
       "Microsoft.AspNet.Cors/5.2.7": {
         "type": "package",
         "compile": {
@@ -932,6 +944,15 @@
         },
         "runtime": {
           "lib/netstandard1.6/NuGet.Frameworks.dll": {}
+        }
+      },
+      "Owin/1.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/Owin.dll": {}
+        },
+        "runtime": {
+          "lib/net40/Owin.dll": {}
         }
       },
       "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
@@ -2742,6 +2763,20 @@
     }
   },
   "libraries": {
+    "IdentityServer3/2.6.3": {
+      "sha512": "TrxCgPjJoSwg32313OOOmR6Nx+m6MQb9WH0hj8dhICW9+LtFzcP6akCwYpQbW0ZN/REnQ7WJ71GLmOGuxckzKw==",
+      "type": "package",
+      "path": "identityserver3/2.6.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "identityserver3.2.6.3.nupkg.sha512",
+        "identityserver3.nuspec",
+        "lib/net45/IdentityServer3.dll",
+        "lib/net45/IdentityServer3.pdb",
+        "lib/net45/IdentityServer3.xml"
+      ]
+    },
     "Microsoft.AspNet.Cors/5.2.7": {
       "sha512": "r7qTj8SKzHT32F2mbB3qgE+6VUd2xILkGaq4LtMW+KP3dDAQmI//j+8Ku01I3D1GKZvB9PU8HTJPkaw7sxSLtQ==",
       "type": "package",
@@ -4210,6 +4245,18 @@
         "lib/netstandard1.6/NuGet.Frameworks.xml",
         "nuget.frameworks.4.7.0.nupkg.sha512",
         "nuget.frameworks.nuspec"
+      ]
+    },
+    "Owin/1.0.0": {
+      "sha512": "OseTFniKmyp76mEzOBwIKGBRS5eMoYNkMKaMXOpxx9jv88+b6mh1rSaw43vjBOItNhaLFG3d0a20PfHyibH5sw==",
+      "type": "package",
+      "path": "owin/1.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net40/Owin.dll",
+        "owin.1.0.0.nupkg.sha512",
+        "owin.nuspec"
       ]
     },
     "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
@@ -8703,6 +8750,7 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
+      "IdentityServer3 >= 2.6.3",
       "Microsoft.AspNet.WebApi.Cors >= 5.2.7",
       "Microsoft.EntityFrameworkCore >= 3.1.2",
       "Microsoft.EntityFrameworkCore.SqlServer >= 3.1.2",
@@ -8753,6 +8801,10 @@
     "frameworks": {
       "netcoreapp3.1": {
         "dependencies": {
+          "IdentityServer3": {
+            "target": "Package",
+            "version": "[2.6.3, )"
+          },
           "Microsoft.AspNet.WebApi.Cors": {
             "target": "Package",
             "version": "[5.2.7, )"
@@ -8807,6 +8859,16 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
+      "message": "Le package 'IdentityServer3 2.6.3' a été restauré en utilisant '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' au lieu du framework cible du projet '.NETCoreApp,Version=v3.1'. Ce package n'est peut-être pas totalement compatible avec votre projet.",
+      "libraryId": "IdentityServer3",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v3.1"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
       "message": "Le package 'Microsoft.AspNet.Cors 5.2.7' a été restauré en utilisant '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' au lieu du framework cible du projet '.NETCoreApp,Version=v3.1'. Ce package n'est peut-être pas totalement compatible avec votre projet.",
       "libraryId": "Microsoft.AspNet.Cors",
       "targetGraphs": [
@@ -8829,6 +8891,16 @@
       "warningLevel": 1,
       "message": "Le package 'Microsoft.AspNet.WebApi.Cors 5.2.7' a été restauré en utilisant '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' au lieu du framework cible du projet '.NETCoreApp,Version=v3.1'. Ce package n'est peut-être pas totalement compatible avec votre projet.",
       "libraryId": "Microsoft.AspNet.WebApi.Cors",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v3.1"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Le package 'Owin 1.0.0' a été restauré en utilisant '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' au lieu du framework cible du projet '.NETCoreApp,Version=v3.1'. Ce package n'est peut-être pas totalement compatible avec votre projet.",
+      "libraryId": "Owin",
       "targetGraphs": [
         ".NETCoreApp,Version=v3.1"
       ]

@@ -6,11 +6,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiPFE.Models;
-using Microsoft.Data.SqlClient;
 
 namespace ApiPFE.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -25,20 +24,32 @@ namespace ApiPFE.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Userss.ToListAsync();
         }
-
-        // GET: api/Users/5
-        [HttpGet("{login}")]
-        public ActionResult<User> GetUser(string login)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Boolean>> GetUser(int id)
         {
-            var us = _context.Users.Where(u => u.login == login).ToList().First();
-            if (us == null)
+            var user = await _context.Userss.FindAsync(id);
+
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return us;
+            return Ok(user);
+        }
+        // GET: api/Users/5
+        [HttpGet("{login}")]
+        public async Task<ActionResult<Boolean>> CheckLogin(string login)
+        {
+            var user = await _context.Userss.Where(user => user.login == login).FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         // PUT: api/Users/5
@@ -76,26 +87,35 @@ namespace ApiPFE.Controllers
         // POST: api/Users
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPost]
+         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
-            await _context.Users.AddAsync(user);
+            _context.Userss.Add(user);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
-
+        [HttpPost]
+        public async Task<ActionResult<User>> UserByData(User user)
+        {
+            var us = await _context.Userss.Where(use => use.login == user.login && use.Password == user.Password).FirstOrDefaultAsync();
+            if(us == null)
+            {
+                return null;
+            }
+            return us;
+        }
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<User>> DeleteUser(long id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Userss.FindAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
 
-            _context.Users.Remove(user);
+            _context.Userss.Remove(user);
             await _context.SaveChangesAsync();
 
             return user;
@@ -103,23 +123,8 @@ namespace ApiPFE.Controllers
 
         private bool UserExists(long id)
         {
-            return _context.Users.Any(e => e.Id == id);
+            return _context.Userss.Any(e => e.Id == id);
         }
-
-        /* [Route("login")]
-         [HttpGet]
-         // GET: api/Users/login/test
-         private async Task<User> getUser(String login)
-         {
-             try
-             {
-                 var us = await _context.Users.Where(u => u.login == login).FirstAsync();
-                 return us;
-             }
-             catch (ArgumentNullException)
-             {
-                 return null;
-             }
-         }*/
+        
     }
 }
