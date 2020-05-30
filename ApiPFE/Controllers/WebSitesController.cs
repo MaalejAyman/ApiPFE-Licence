@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiPFE.Models;
-using ApiPFE.Models.Read;
+using ApiPFE.Models.Write;
 
 namespace ApiPFE.Controllers
 {
@@ -78,7 +78,7 @@ namespace ApiPFE.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<WebSites>> PostWebSites(WebSitesRead WS)
+        public async Task<ActionResult<WebSites>> PostWebSites(WebSitesWrite WS)
         {
             var webSites = Sync(WS).Result;
             _context.WebSites.Add(webSites);
@@ -98,7 +98,7 @@ namespace ApiPFE.Controllers
                 }
             }
 
-            return CreatedAtAction("GetWebSites", new { id = webSites.Id }, webSites);
+            return CreatedAtAction("GetWebSites", new { id = webSites.Id , User = webSites.IdUserNavigation.Login});
         }
 
         // DELETE: api/WebSites/5
@@ -121,7 +121,7 @@ namespace ApiPFE.Controllers
         {
             return _context.WebSites.Any(e => e.Id == id);
         }
-        private async Task<WebSites> Sync(WebSitesRead WS)
+        private async Task<WebSites> Sync(WebSitesWrite WS)
         {
             var webs = new WebSites();
             webs.Name = WS.Name;

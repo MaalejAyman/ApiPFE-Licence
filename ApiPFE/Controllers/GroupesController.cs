@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiPFE.Models;
-using ApiPFE.Models.Read;
+using ApiPFE.Models.Write;
 
 namespace ApiPFE.Controllers
 {
@@ -78,7 +78,7 @@ namespace ApiPFE.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Groupes>> PostGroupes(GroupesRead grp)
+        public async Task<ActionResult<Groupes>> PostGroupes(GroupesWrite grp)
         {
             var groupes = Sync(grp).Result;
             _context.Groupes.Add(groupes);
@@ -121,7 +121,7 @@ namespace ApiPFE.Controllers
         {
             return _context.Groupes.Any(e => e.Id == id);
         }
-        private async Task<Groupes> Sync(GroupesRead G)
+        private async Task<Groupes> Sync(GroupesWrite G)
         {
             var grp = new Groupes();
             grp.Name = G.Name;

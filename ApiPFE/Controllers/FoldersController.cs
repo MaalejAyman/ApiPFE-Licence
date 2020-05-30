@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiPFE.Models;
-using ApiPFE.Models.Read;
+using ApiPFE.Models.Write;
 
 namespace ApiPFE.Controllers
 {
@@ -78,7 +78,7 @@ namespace ApiPFE.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Folders>> PostFolders(FoldersRead fold)
+        public async Task<ActionResult<Folders>> PostFolders(FoldersWrite fold)
         {
             var folders = Sync(fold).Result;
             _context.Folders.Add(folders);
@@ -121,7 +121,7 @@ namespace ApiPFE.Controllers
         {
             return _context.Folders.Any(e => e.Id == id);
         }
-        private async Task<Folders> Sync(FoldersRead fold)
+        private async Task<Folders> Sync(FoldersWrite fold)
         {
 
             var f = new Folders();

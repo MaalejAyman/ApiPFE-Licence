@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ApiPFE.Models.Read
+namespace ApiPFE.Models.Write
 
 {
-    public class PasswordsRead
+    public class PasswordsWrite
     {
         public string Login { get; set; }
         public string Value { get; set; }

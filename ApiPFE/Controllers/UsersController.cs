@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiPFE.Models;
+using ApiPFE.Models.Write;
 
 namespace ApiPFE.Controllers
 {
@@ -27,7 +28,7 @@ namespace ApiPFE.Controllers
             return await _context.Userss.ToListAsync();
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<Boolean>> GetUser(int id)
+        public async Task<ActionResult<Boolean>> GetUser(long id)
         {
             var user = await _context.Userss.FindAsync(id);
 
@@ -35,7 +36,11 @@ namespace ApiPFE.Controllers
             {
                 return NotFound();
             }
-
+            user.Passwords = await _context.Passwords.Where(psd => psd.IdUser == user.Id).ToListAsync();
+            foreach( Passwords psd in user.Passwords)
+            {
+                psd.IdUserNavigation = null;
+            }
             return Ok(user);
         }
         // GET: api/Users/5
@@ -103,6 +108,10 @@ namespace ApiPFE.Controllers
             {
                 return null;
             }
+            us.Passwords = null;
+            us.WebSites = null;
+            us.Groupes = null;
+            us.Folders = null;
             return us;
         }
         // DELETE: api/Users/5

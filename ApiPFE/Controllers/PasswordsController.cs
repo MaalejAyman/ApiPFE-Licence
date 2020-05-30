@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiPFE.Models;
-using ApiPFE.Models.Read;
+using ApiPFE.Models.Write;
 
 namespace ApiPFE.Controllers
 {
@@ -78,7 +78,7 @@ namespace ApiPFE.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Passwords>> PostPasswords(PasswordsRead pass)
+        public async Task<ActionResult<Passwords>> PostPasswords(PasswordsWrite pass)
         {
             var passwords = Sync(pass).Result;
             _context.Passwords.Add(passwords);
@@ -123,7 +123,7 @@ namespace ApiPFE.Controllers
             return _context.Passwords.Any(e => e.Id == id);
         }
         [HttpPost]
-        private async Task<Passwords> Sync(PasswordsRead p)
+        private async Task<Passwords> Sync(PasswordsWrite p)
         {
             
             var pass = new Passwords();
