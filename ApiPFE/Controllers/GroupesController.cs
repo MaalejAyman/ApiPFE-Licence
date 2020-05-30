@@ -78,8 +78,9 @@ namespace ApiPFE.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Groupes>> PostGroupes(Groupes groupes)
+        public async Task<ActionResult<Groupes>> PostGroupes(GroupesRead grp)
         {
+            var groupes = Sync(grp).Result;
             _context.Groupes.Add(groupes);
             try
             {
@@ -97,7 +98,7 @@ namespace ApiPFE.Controllers
                 }
             }
 
-            return CreatedAtAction("GetGroupes", new { id = groupes.Id }, groupes);
+            return CreatedAtAction("GetGroupes", new { id = groupes.Id ,Name = groupes.Name});
         }
 
         // DELETE: api/Groupes/5

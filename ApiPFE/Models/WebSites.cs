@@ -13,8 +13,8 @@ namespace ApiPFE.Models
         public long Id { get; set; }
         public string Name { get; set; }
         public string Link { get; set; }
-        public long? UserId { get; set; }
-
+        public long? IdUser { get; set; }
+        public virtual Userss IdUserNavigation { get; set; }
         public virtual ICollection<Passwords> Passwords { get; set; }
     }
 }

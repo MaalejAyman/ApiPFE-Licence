@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiPFE.Models;
+using ApiPFE.Models.Read;
 
 namespace ApiPFE.Controllers
 {
@@ -77,8 +78,9 @@ namespace ApiPFE.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<WebSites>> PostWebSites(WebSites webSites)
+        public async Task<ActionResult<WebSites>> PostWebSites(WebSitesRead WS)
         {
+            var webSites = Sync(WS).Result;
             _context.WebSites.Add(webSites);
             try
             {
@@ -118,6 +120,15 @@ namespace ApiPFE.Controllers
         private bool WebSitesExists(long id)
         {
             return _context.WebSites.Any(e => e.Id == id);
+        }
+        private async Task<WebSites> Sync(WebSitesRead WS)
+        {
+            var webs = new WebSites();
+            webs.Name = WS.Name;
+            webs.Link = WS.Link;
+            webs.IdUser = WS.IdUser;
+            webs.IdUserNavigation = await _context.Userss.Where(usr => usr.Id == webs.IdUser).FirstOrDefaultAsync();
+            return webs;
         }
     }
 }
