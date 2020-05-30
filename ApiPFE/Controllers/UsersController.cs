@@ -22,7 +22,7 @@ namespace ApiPFE.Controllers
 
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<Userss>>> GetUsers()
         {
             return await _context.Userss.ToListAsync();
         }
@@ -42,7 +42,7 @@ namespace ApiPFE.Controllers
         [HttpGet("{login}")]
         public async Task<ActionResult<Boolean>> CheckLogin(string login)
         {
-            var user = await _context.Userss.Where(user => user.login == login).FirstOrDefaultAsync();
+            var user = await _context.Userss.Where(user => user.Login == login).FirstOrDefaultAsync();
 
             if (user == null)
             {
@@ -56,7 +56,7 @@ namespace ApiPFE.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(long id, User user)
+        public async Task<IActionResult> PutUser(long id, Userss user)
         {
             if (id != user.Id)
             {
@@ -88,7 +88,7 @@ namespace ApiPFE.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
          [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<Userss>> PostUser(Userss user)
         {
             _context.Userss.Add(user);
             await _context.SaveChangesAsync();
@@ -96,9 +96,9 @@ namespace ApiPFE.Controllers
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
         [HttpPost]
-        public async Task<ActionResult<User>> UserByData(User user)
+        public async Task<ActionResult<Userss>> UserByData(Userss user)
         {
-            var us = await _context.Userss.Where(use => use.login == user.login && use.Password == user.Password).FirstOrDefaultAsync();
+            var us = await _context.Userss.Where(use => use.Login == user.Login && use.Password == user.Password).FirstOrDefaultAsync();
             if(us == null)
             {
                 return null;
@@ -107,7 +107,7 @@ namespace ApiPFE.Controllers
         }
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<User>> DeleteUser(long id)
+        public async Task<ActionResult<Userss>> DeleteUser(long id)
         {
             var user = await _context.Userss.FindAsync(id);
             if (user == null)
