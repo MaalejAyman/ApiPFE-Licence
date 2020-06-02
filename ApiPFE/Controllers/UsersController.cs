@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiPFE.Models;
 using ApiPFE.Models.Write;
+using ApiPFE.Models.Read;
 
 namespace ApiPFE.Controllers
 {
@@ -101,18 +102,18 @@ namespace ApiPFE.Controllers
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
         [HttpPost]
-        public async Task<ActionResult<Userss>> UserByData(Userss user)
+        public async Task<ActionResult<UsersRead>> UserByData(UsersWrite user)
         {
             var us = await _context.Userss.Where(use => use.Login == user.Login && use.Password == user.Password).FirstOrDefaultAsync();
             if(us == null)
             {
                 return null;
             }
-            us.Passwords = null;
-            us.WebSites = null;
-            us.Groupes = null;
-            us.Folders = null;
-            return us;
+            var usR = new UsersRead();
+            usR.Id = us.Id;
+            usR.Login = us.Login;
+            usR.Password = us.Password;
+            return usR;
         }
         // DELETE: api/Users/5
         [HttpDelete("{id}")]

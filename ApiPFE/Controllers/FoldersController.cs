@@ -73,7 +73,16 @@ namespace ApiPFE.Controllers
 
             return NoContent();
         }
-
+        [HttpPost]
+        public async Task<ActionResult<IEnumerable<Folders>>> FoldersByUserId(UsersWrite u)
+        {
+            var t = await _context.Folders.Where(fld=> fld.IdUser==u.Id).ToListAsync();
+            foreach(Folders f in t)
+            {
+                f.IdParentFolderNavigation = null;
+            }
+            return t;
+        }
         // POST: api/Folders
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
