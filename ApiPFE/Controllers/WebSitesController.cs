@@ -41,6 +41,12 @@ namespace ApiPFE.Controllers
 
             return webSites;
         }
+        [HttpPost]
+        public async Task<ActionResult<IEnumerable<WebSites>>> WebSitesByUserId(UsersWrite u)
+        {
+            var t = await _context.WebSites.Where(WS => WS.IdUser == u.Id).ToListAsync();
+            return t;
+        }
 
         // PUT: api/WebSites/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
