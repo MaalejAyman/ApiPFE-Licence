@@ -14,9 +14,9 @@ namespace ApiPFE.Controllers
     [ApiController]
     public class PasswordsController : ControllerBase
     {
-        private readonly UserContext _context;
+        private readonly userscontext _context;
 
-        public PasswordsController(UserContext context)
+        public PasswordsController(userscontext context)
         {
             _context = context;
         }

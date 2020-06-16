@@ -15,9 +15,9 @@ namespace ApiPFE.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly UserContext _context;
+        private readonly userscontext _context;
 
-        public UsersController(UserContext context)
+        public UsersController(userscontext context)
         {
             _context = context;
         }

@@ -6,54 +6,53 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiPFE.Models;
-using ApiPFE.Models.Write;
 
 namespace ApiPFE.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
-    public class GroupesController : ControllerBase
+    public class UserssGroupesController : ControllerBase
     {
         private readonly userscontext _context;
 
-        public GroupesController(userscontext context)
+        public UserssGroupesController(userscontext context)
         {
             _context = context;
         }
 
-        // GET: api/Groupes
+        // GET: api/UserssGroupes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Groupes>>> GetGroupes()
+        public async Task<ActionResult<IEnumerable<UserssGroupes>>> GetUserssGroupes()
         {
-            return await _context.Groupes.ToListAsync();
+            return await _context.UserssGroupes.ToListAsync();
         }
 
-        // GET: api/Groupes/5
+        // GET: api/UserssGroupes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Groupes>> GetGroupes(long id)
+        public async Task<ActionResult<UserssGroupes>> GetUserssGroupes(long id)
         {
-            var groupes = await _context.Groupes.FindAsync(id);
+            var userssGroupes = await _context.UserssGroupes.FindAsync(id);
 
-            if (groupes == null)
+            if (userssGroupes == null)
             {
                 return NotFound();
             }
 
-            return groupes;
+            return userssGroupes;
         }
 
-        // PUT: api/Groupes/5
+        // PUT: api/UserssGroupes/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutGroupes(long id, Groupes groupes)
+        public async Task<IActionResult> PutUserssGroupes(long id, UserssGroupes userssGroupes)
         {
-            if (id != groupes.Id)
+            if (id != userssGroupes.IdUsr)
             {
                 return BadRequest();
             }
 
-            _context.Entry(groupes).State = EntityState.Modified;
+            _context.Entry(userssGroupes).State = EntityState.Modified;
 
             try
             {
@@ -61,7 +60,7 @@ namespace ApiPFE.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!GroupesExists(id))
+                if (!UserssGroupesExists(id))
                 {
                     return NotFound();
                 }
@@ -74,21 +73,20 @@ namespace ApiPFE.Controllers
             return NoContent();
         }
 
-        // POST: api/Groupes
+        // POST: api/UserssGroupes
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Groupes>> PostGroupes(GroupesWrite grp)
+        public async Task<ActionResult<UserssGroupes>> PostUserssGroupes(UserssGroupes userssGroupes)
         {
-            var groupes = Sync(grp).Result;
-            _context.Groupes.Add(groupes);
+            _context.UserssGroupes.Add(userssGroupes);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (GroupesExists(groupes.Id))
+                if (UserssGroupesExists(userssGroupes.IdUsr))
                 {
                     return Conflict();
                 }
@@ -98,36 +96,28 @@ namespace ApiPFE.Controllers
                 }
             }
 
-            return CreatedAtAction("GetGroupes", new { id = groupes.Id ,Name = groupes.Name});
+            return CreatedAtAction("GetUserssGroupes", new { id = userssGroupes.IdUsr }, userssGroupes);
         }
 
-        // DELETE: api/Groupes/5
+        // DELETE: api/UserssGroupes/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Groupes>> DeleteGroupes(long id)
+        public async Task<ActionResult<UserssGroupes>> DeleteUserssGroupes(long id)
         {
-            var groupes = await _context.Groupes.FindAsync(id);
-            if (groupes == null)
+            var userssGroupes = await _context.UserssGroupes.FindAsync(id);
+            if (userssGroupes == null)
             {
                 return NotFound();
             }
 
-            _context.Groupes.Remove(groupes);
+            _context.UserssGroupes.Remove(userssGroupes);
             await _context.SaveChangesAsync();
 
-            return groupes;
+            return userssGroupes;
         }
 
-        private bool GroupesExists(long id)
+        private bool UserssGroupesExists(long id)
         {
-            return _context.Groupes.Any(e => e.Id == id);
-        }
-        private async Task<Groupes> Sync(GroupesWrite G)
-        {
-            var grp = new Groupes();
-            grp.Name = G.Name;
-            grp.IdUser = G.IdUser;
-            grp.IdUserNavigation = await _context.Userss.Where(g => g.Id == G.IdUser).FirstOrDefaultAsync();
-            return grp;
+            return _context.UserssGroupes.Any(e => e.IdUsr == id);
         }
     }
 }

@@ -295,4 +295,3 @@ E:\Studies\Project\Projet PFE\ApiPFE\ApiPFE\bin\Debug\netcoreapp3.1\tr\Microsoft
 E:\Studies\Project\Projet PFE\ApiPFE\ApiPFE\bin\Debug\netcoreapp3.1\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 E:\Studies\Project\Projet PFE\ApiPFE\ApiPFE\bin\Debug\netcoreapp3.1\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
 E:\Studies\Project\Projet PFE\ApiPFE\ApiPFE\obj\Debug\netcoreapp3.1\ApiPFE.MvcApplicationPartsAssemblyInfo.cache
-E:\Studies\Project\Projet PFE\ApiPFE\ApiPFE\obj\Debug\netcoreapp3.1\ApiPFE.csprojAssemblyReference.cache

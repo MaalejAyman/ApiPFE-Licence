@@ -14,9 +14,9 @@ namespace ApiPFE.Controllers
     [ApiController]
     public class WebSitesController : ControllerBase
     {
-        private readonly UserContext _context;
+        private readonly userscontext _context;
 
-        public WebSitesController(UserContext context)
+        public WebSitesController(userscontext context)
         {
             _context = context;
         }

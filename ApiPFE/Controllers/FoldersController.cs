@@ -14,9 +14,9 @@ namespace ApiPFE.Controllers
     [ApiController]
     public class FoldersController : ControllerBase
     {
-        private readonly UserContext _context;
+        private readonly userscontext _context;
 
-        public FoldersController(UserContext context)
+        public FoldersController(userscontext context)
         {
             _context = context;
         }
