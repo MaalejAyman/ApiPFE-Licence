@@ -20,6 +20,8 @@ namespace ApiPFE.Models
         public string Name { get; set; }
         public long? IdParentFolder { get; set; }
         public long IdUser { get; set; }
+        [StringLength(50)]
+        public string Parent { get; set; }
 
         [ForeignKey(nameof(IdParentFolder))]
         [InverseProperty(nameof(Folders.InverseIdParentFolderNavigation))]

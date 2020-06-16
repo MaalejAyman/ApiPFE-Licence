@@ -9,7 +9,9 @@ namespace ApiPFE.Models
     {
         public Groupes()
         {
+            GroupesPasswords = new HashSet<GroupesPasswords>();
             Passwords = new HashSet<Passwords>();
+            UserssGroupes = new HashSet<UserssGroupes>();
         }
 
         [Key]
@@ -23,6 +25,10 @@ namespace ApiPFE.Models
         [InverseProperty(nameof(Userss.Groupes))]
         public virtual Userss IdUserNavigation { get; set; }
         [InverseProperty("IdGrpNavigation")]
+        public virtual ICollection<GroupesPasswords> GroupesPasswords { get; set; }
+        [InverseProperty("IdGrpNavigation")]
         public virtual ICollection<Passwords> Passwords { get; set; }
+        [InverseProperty("IdGrpNavigation")]
+        public virtual ICollection<UserssGroupes> UserssGroupes { get; set; }
     }
 }

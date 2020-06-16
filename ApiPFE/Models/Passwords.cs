@@ -7,6 +7,11 @@ namespace ApiPFE.Models
 {
     public partial class Passwords
     {
+        public Passwords()
+        {
+            GroupesPasswords = new HashSet<GroupesPasswords>();
+        }
+
         [Key]
         public long Id { get; set; }
         [Required]
@@ -17,7 +22,7 @@ namespace ApiPFE.Models
         public string Value { get; set; }
         public int? Score { get; set; }
         public long? IdGrp { get; set; }
-        public long IdFldr { get; set; }
+        public long? IdFldr { get; set; }
         [Column("IdWS")]
         public long IdWs { get; set; }
         public long IdUser { get; set; }
@@ -34,5 +39,7 @@ namespace ApiPFE.Models
         [ForeignKey(nameof(IdWs))]
         [InverseProperty(nameof(WebSites.Passwords))]
         public virtual WebSites IdWsNavigation { get; set; }
+        [InverseProperty("IdPassNavigation")]
+        public virtual ICollection<GroupesPasswords> GroupesPasswords { get; set; }
     }
 }

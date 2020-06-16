@@ -11,5 +11,6 @@ namespace ApiPFE.Models.Write
         public string Name { get; set; }
         public long? IdParentFolder { get; set; }
         public long IdUser { get; set; }
+        public string? Parent { get; set; }
     }
 }

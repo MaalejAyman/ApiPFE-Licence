@@ -17,8 +17,10 @@ namespace ApiPFE.Models
 
         public virtual DbSet<Folders> Folders { get; set; }
         public virtual DbSet<Groupes> Groupes { get; set; }
+        public virtual DbSet<GroupesPasswords> GroupesPasswords { get; set; }
         public virtual DbSet<Passwords> Passwords { get; set; }
         public virtual DbSet<Userss> Userss { get; set; }
+        public virtual DbSet<UserssGroupes> UserssGroupes { get; set; }
         public virtual DbSet<WebSites> WebSites { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -34,6 +36,8 @@ namespace ApiPFE.Models
             modelBuilder.Entity<Folders>(entity =>
             {
                 entity.Property(e => e.Name).IsUnicode(false);
+
+                entity.Property(e => e.Parent).IsUnicode(false);
 
                 entity.HasOne(d => d.IdParentFolderNavigation)
                     .WithMany(p => p.InverseIdParentFolderNavigation)
@@ -57,6 +61,24 @@ namespace ApiPFE.Models
                     .HasConstraintName("UserGroupe");
             });
 
+            modelBuilder.Entity<GroupesPasswords>(entity =>
+            {
+                entity.HasKey(e => new { e.IdPass, e.IdGrp })
+                    .HasName("PK__GroupesP__AC4B51117CBB7A23");
+
+                entity.HasOne(d => d.IdGrpNavigation)
+                    .WithMany(p => p.GroupesPasswords)
+                    .HasForeignKey(d => d.IdGrp)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_GroupesPasswords_ToGroupes");
+
+                entity.HasOne(d => d.IdPassNavigation)
+                    .WithMany(p => p.GroupesPasswords)
+                    .HasForeignKey(d => d.IdPass)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_GroupesPasswords_ToPasswords");
+            });
+
             modelBuilder.Entity<Passwords>(entity =>
             {
                 entity.Property(e => e.Login).IsUnicode(false);
@@ -66,7 +88,6 @@ namespace ApiPFE.Models
                 entity.HasOne(d => d.IdFldrNavigation)
                     .WithMany(p => p.Passwords)
                     .HasForeignKey(d => d.IdFldr)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("PasswordFldr");
 
                 entity.HasOne(d => d.IdGrpNavigation)
@@ -92,6 +113,24 @@ namespace ApiPFE.Models
                 entity.Property(e => e.Login).IsUnicode(false);
 
                 entity.Property(e => e.Password).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<UserssGroupes>(entity =>
+            {
+                entity.HasKey(e => new { e.IdUsr, e.IdGrp })
+                    .HasName("PK__UserssGr__7C56696B839E2A9F");
+
+                entity.HasOne(d => d.IdGrpNavigation)
+                    .WithMany(p => p.UserssGroupes)
+                    .HasForeignKey(d => d.IdGrp)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_UserssGroupes_ToGroupes");
+
+                entity.HasOne(d => d.IdUsrNavigation)
+                    .WithMany(p => p.UserssGroupes)
+                    .HasForeignKey(d => d.IdUsr)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_UserssGroupes_ToUsers");
             });
 
             modelBuilder.Entity<WebSites>(entity =>

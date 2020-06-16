@@ -38,7 +38,7 @@ namespace ApiPFE.Controllers
             {
                 return NotFound();
             }
-
+            passwords.Id = id;
             return passwords;
         }
 
@@ -101,7 +101,16 @@ namespace ApiPFE.Controllers
             return CreatedAtAction("GetPasswords", new { id = passwords.Id });
         }
 
-
+        [HttpPost]
+        public async Task<ActionResult<IEnumerable<Passwords>>> GetPasswordsByUser(Userss u)
+        {
+            var p = await _context.Passwords.Where(psd => psd.IdUser == u.Id).ToListAsync();
+            foreach (Passwords psd in p)
+            {
+                psd.IdUserNavigation = null;
+            }
+            return p;
+        }
         // DELETE: api/Passwords/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Passwords>> DeletePasswords(long id)

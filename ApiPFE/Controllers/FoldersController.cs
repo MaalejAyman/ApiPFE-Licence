@@ -83,6 +83,11 @@ namespace ApiPFE.Controllers
             }
             return t;
         }
+        [HttpPost]
+        public long GetLastID()
+        {
+            return _context.Folders.ToListAsync().Result.LastOrDefault().Id;     
+        }
         // POST: api/Folders
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
@@ -107,7 +112,7 @@ namespace ApiPFE.Controllers
                 }
             }
 
-            return CreatedAtAction("GetFolders", new { id = folders.Id , Name = folders.Name,User=folders.IdUserNavigation.Login/*,Folder = folders.IdParentFolderNavigation.Name*/});
+            return CreatedAtAction("GetFolders", new { id = folders.Id , Name = folders.Name,User=folders.IdUserNavigation.Login, IdParentFolder = folders.IdParentFolder,Parent = folders.Parent});
         }
 
         // DELETE: api/Folders/5
