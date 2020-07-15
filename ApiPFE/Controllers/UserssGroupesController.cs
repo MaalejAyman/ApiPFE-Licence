@@ -9,7 +9,7 @@ using ApiPFE.Models;
 
 namespace ApiPFE.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class UserssGroupesController : ControllerBase
     {
@@ -118,6 +118,17 @@ namespace ApiPFE.Controllers
         private bool UserssGroupesExists(long id)
         {
             return _context.UserssGroupes.Any(e => e.IdUsr == id);
+        }
+        [HttpPost]
+        public async Task<List<long>> GetUsersByGroupes(Groupes g)
+        {
+            var U = new List<long>();
+            var GU = await _context.UserssGroupes.Where(gr => gr.IdGrp == g.Id).ToListAsync();
+            foreach(UserssGroupes GU1 in GU)
+            {
+                U.Add(GU1.IdUsr);
+            }
+            return U;
         }
     }
 }

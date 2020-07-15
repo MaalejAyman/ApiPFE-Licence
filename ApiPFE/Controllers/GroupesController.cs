@@ -97,7 +97,21 @@ namespace ApiPFE.Controllers
                     throw;
                 }
             }
-
+            foreach(Userss u in grp.Users)
+            {
+                UserssGroupes ug = new UserssGroupes();
+                ug.IdGrp = groupes.Id;
+                ug.IdUsr = u.Id;
+                _context.UserssGroupes.Add(ug);
+            }
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                    throw;
+            }
             return CreatedAtAction("GetGroupes", new { id = groupes.Id ,Name = groupes.Name});
         }
 
@@ -128,6 +142,49 @@ namespace ApiPFE.Controllers
             grp.IdUser = G.IdUser;
             grp.IdUserNavigation = await _context.Userss.Where(g => g.Id == G.IdUser).FirstOrDefaultAsync();
             return grp;
+        }
+        [HttpPost]
+        public async Task<ActionResult<IEnumerable<Groupes>>> GroupesByUserId(UsersWrite u)
+        {
+            var t = await _context.Groupes.Where(g => g.IdUser == u.Id).ToListAsync();
+            return t;
+        }
+        [HttpPost]
+        public async Task<ActionResult<Groupes>> UpdateGroupes(GroupesWrite grp)
+        {
+            var groupes = Sync(grp).Result;
+            var p = await _context.Groupes.FindAsync(grp.Id);
+            p.Name = groupes.Name;
+            p.Id = grp.Id;
+            var t = await _context.UserssGroupes.Where(GP => GP.IdGrp == p.Id).ToListAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+            foreach (UserssGroupes UG1 in t)
+            {
+                _context.UserssGroupes.Remove(UG1);
+            }
+            foreach (Userss u in grp.Users)
+            {
+                UserssGroupes ug = new UserssGroupes();
+                ug.IdGrp = grp.Id;
+                ug.IdUsr = u.Id;
+                _context.UserssGroupes.Add(ug);
+            }
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+            return CreatedAtAction("GetGroupes", new { id = groupes.Id, Name = groupes.Name });
         }
     }
 }

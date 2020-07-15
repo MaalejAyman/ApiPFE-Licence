@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiPFE.Models;
 using ApiPFE.Models.Write;
+using ApiPFE.Models.Read;
 
 namespace ApiPFE.Controllers
 {
@@ -15,6 +16,7 @@ namespace ApiPFE.Controllers
     public class PasswordsController : ControllerBase
     {
         private readonly userscontext _context;
+        private PasswordsRead[] pass;
 
         public PasswordsController(userscontext context)
         {
@@ -97,19 +99,104 @@ namespace ApiPFE.Controllers
                     throw;
                 }
             }
+            if (pass.Groupes != null)
+            {
+                int x = 0;
+                foreach (long grp in pass.Groupes)
+                {
+                    var GP = new GroupesPasswords();
+                    GP.IdGrp = grp;
+                    GP.IdPass = passwords.Id;
+                    GP.PasswordCrypPub = pass.PasswordCrypPubs.GetValue(x).ToString();
+                    x++;
+                    this._context.GroupesPasswords.Add(GP);
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateException)
+                    {
 
+                    }
+                }
+            }
             return CreatedAtAction("GetPasswords", new { id = passwords.Id });
         }
-
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<Passwords>>> GetPasswordsByUser(Userss u)
+        public async Task<ActionResult<Passwords>> UpdatePasswords(PasswordsWrite pass)
+        {
+            var passwords = Sync(pass).Result;
+            var p = await _context.Passwords.FindAsync(pass.Id);
+            p.Login = passwords.Login;
+            p.Value = passwords.Value;
+            p.IdWs = passwords.IdWs;
+            p.IdUser = passwords.IdUser;
+            p.Score = passwords.Score;
+            p.IdFldr = passwords.IdFldr;
+            var t = await _context.GroupesPasswords.Where(GP => GP.IdPass == pass.Id).ToListAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+
+            }
+            foreach (GroupesPasswords GP1 in t)
+            {
+                _context.GroupesPasswords.Remove(GP1);
+            }
+
+            if (pass.Groupes != null)
+            {
+                int x = 0;
+                foreach (long grp in pass.Groupes)
+                {
+                    var GP = new GroupesPasswords();
+                    GP.IdGrp = grp;
+                    GP.IdPass = pass.Id;
+                    GP.PasswordCrypPub = pass.PasswordCrypPubs.GetValue(x).ToString();
+                    x++;
+                    this._context.GroupesPasswords.Add(GP);
+                }
+            }
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+
+            }
+            return CreatedAtAction("GetPasswords", new { id = passwords.Id });
+        }
+        [HttpPost]
+        public async Task<List<PasswordsRead>> GetPasswordsByUser(Userss u)
         {
             var p = await _context.Passwords.Where(psd => psd.IdUser == u.Id).ToListAsync();
+            List<PasswordsRead> passRead = new List<PasswordsRead>();
             foreach (Passwords psd in p)
             {
                 psd.IdUserNavigation = null;
+                var psdR = new PasswordsRead();
+                psdR.Id = psd.Id;
+                psdR.Value = psd.Value;
+                psdR.IdFldr = psd.IdFldr;
+                psdR.IdUser = psd.IdUser;
+                psdR.IdWs = psd.IdWs;
+                psdR.Login = psd.Login;
+                psdR.Groupes = new List<long>();
+                var t = await _context.GroupesPasswords.Where(g => g.IdPass == psd.Id).ToListAsync();
+                if (t != null)
+                {
+                    foreach (GroupesPasswords gp in t)
+                    {
+                        psdR.Groupes.Add(gp.IdGrp);
+                    }
+                }
+                passRead.Add(psdR);
             }
-            return p;
+            return passRead;
         }
         // DELETE: api/Passwords/5
         [HttpDelete("{id}")]
@@ -126,7 +213,32 @@ namespace ApiPFE.Controllers
 
             return passwords;
         }
-
+        [HttpPost]
+        public async Task<List<PasswordsRead>> GetSharedPasswords(Userss u)
+        {
+            List<PasswordsRead> PRS=new List<PasswordsRead>();
+            var G = await _context.UserssGroupes.Where(g => g.IdUsr == u.Id).ToListAsync();
+            foreach(UserssGroupes grp in G)
+            {
+                var pass = await _context.GroupesPasswords.Where(p => p.IdGrp == grp.IdGrp).ToListAsync();
+                foreach(GroupesPasswords Gp in pass)
+                {
+                    var pr = new PasswordsRead();
+                    pr.Id = Gp.IdPass;
+                    var p = await _context.Passwords.Where(p1 => p1.Id == Gp.IdPass).FirstOrDefaultAsync();
+                    pr.IdGrp = Gp.IdGrp;
+                    pr.Login = p.Login;
+                    pr.Value = p.Value;
+                    pr.Value2 = Gp.PasswordCrypPub;
+                    pr.IdUser = p.IdUser;
+                    pr.IdWs = p.IdWs;
+                    var gr = await _context.Groupes.Where(p1 => p1.Id == Gp.IdGrp).FirstOrDefaultAsync();
+                    pr.GrpName = gr.Name;
+                    PRS.Add(pr);
+                }
+            }
+            return PRS;
+        }
         private bool PasswordsExists(long id)
         {
             return _context.Passwords.Any(e => e.Id == id);

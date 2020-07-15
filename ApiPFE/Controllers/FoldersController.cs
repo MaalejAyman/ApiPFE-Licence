@@ -146,5 +146,9 @@ namespace ApiPFE.Controllers
             f.IdUserNavigation = await _context.Userss.Where(usr => usr.Id == fold.IdUser).FirstOrDefaultAsync();
             return f;
         }
+        public async Task<ActionResult<Folders>> GetSharedFolder(Userss u)
+        {
+            return await _context.Folders.Where(f => f.Name == "Shared").FirstOrDefaultAsync();
+        }
     }
 }

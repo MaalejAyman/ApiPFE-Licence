@@ -66,6 +66,8 @@ namespace ApiPFE.Models
                 entity.HasKey(e => new { e.IdPass, e.IdGrp })
                     .HasName("PK__GroupesP__AC4B51117CBB7A23");
 
+                entity.Property(e => e.PasswordCrypPub).IsUnicode(false);
+
                 entity.HasOne(d => d.IdGrpNavigation)
                     .WithMany(p => p.GroupesPasswords)
                     .HasForeignKey(d => d.IdGrp)

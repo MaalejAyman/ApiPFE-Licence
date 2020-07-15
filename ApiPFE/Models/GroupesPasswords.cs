@@ -11,6 +11,9 @@ namespace ApiPFE.Models
         public long IdGrp { get; set; }
         [Key]
         public long IdPass { get; set; }
+        [Required]
+        [StringLength(50)]
+        public string PasswordCrypPub { get; set; }
 
         [ForeignKey(nameof(IdGrp))]
         [InverseProperty(nameof(Groupes.GroupesPasswords))]

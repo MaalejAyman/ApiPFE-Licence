@@ -7,7 +7,9 @@ namespace ApiPFE.Models.Write
 {
     public class GroupesWrite
     {
+        public long Id { get; set; }
         public string Name { get; set; }
         public long? IdUser { get; set; }
+        public Userss[]? Users { get; set; }
     }
 }

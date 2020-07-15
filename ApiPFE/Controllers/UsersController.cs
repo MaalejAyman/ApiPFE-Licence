@@ -23,10 +23,15 @@ namespace ApiPFE.Controllers
         }
 
         // GET: api/Users
-        [HttpGet]
+        [HttpPost]
         public async Task<ActionResult<IEnumerable<Userss>>> GetUsers()
         {
-            return await _context.Userss.ToListAsync();
+            var u= await _context.Userss.ToListAsync();
+            foreach(Userss user in u)
+            {
+                user.Password = null;
+            }
+            return u;
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<Boolean>> GetUser(long id)
@@ -98,7 +103,13 @@ namespace ApiPFE.Controllers
         {
             _context.Userss.Add(user);
             await _context.SaveChangesAsync();
-
+            Folders fw = new Folders();
+            fw.Name = "Shared";
+            fw.IdUser = user.Id;
+            fw.Parent = null;
+            fw.IdParentFolder = null;
+            _context.Folders.Add(fw);
+            await _context.SaveChangesAsync();
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
         [HttpPost]
