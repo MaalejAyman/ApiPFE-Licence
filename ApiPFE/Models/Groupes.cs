@@ -19,11 +19,7 @@ namespace ApiPFE.Models
         [Required]
         [StringLength(50)]
         public string Name { get; set; }
-        public long? IdUser { get; set; }
 
-        [ForeignKey(nameof(IdUser))]
-        [InverseProperty(nameof(Userss.Groupes))]
-        public virtual Userss IdUserNavigation { get; set; }
         [InverseProperty("IdGrpNavigation")]
         public virtual ICollection<GroupesPasswords> GroupesPasswords { get; set; }
         [InverseProperty("IdGrpNavigation")]

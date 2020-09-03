@@ -15,6 +15,7 @@ namespace ApiPFE.Controllers
     public class FoldersController : ControllerBase
     {
         private readonly userscontext _context;
+        private PasswordsController pc;
 
         public FoldersController(userscontext context)
         {
@@ -112,23 +113,68 @@ namespace ApiPFE.Controllers
                 }
             }
 
-            return CreatedAtAction("GetFolders", new { id = folders.Id , Name = folders.Name,User=folders.IdUserNavigation.Login, IdParentFolder = folders.IdParentFolder,Parent = folders.Parent});
+            return CreatedAtAction("GetFolders", new { Id = folders.Id , Name = folders.Name,User=folders.IdUserNavigation.Login, IdParentFolder = folders.IdParentFolder,Parent = folders.Parent});
         }
-
-        // DELETE: api/Folders/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Folders>> DeleteFolders(long id)
+        [HttpPost]
+        public async Task<ActionResult<long>> RenameFolders(FoldersWrite fold)
         {
-            var folders = await _context.Folders.FindAsync(id);
+            var folders = await _context.Folders.FindAsync(fold.Id);
+            folders.Name = fold.Name;
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+
+            return 1;
+        }
+        // DELETE: api/Folders/5
+        [HttpPost]
+        public async Task<ActionResult<long>> DeleteFolders(Folders f)
+        {
+            var folders = await _context.Folders.FindAsync(f.Id);
+            var Passwords = await _context.Passwords.Where((e)=>e.IdFldr==f.Id).ToListAsync();
+            var Folders = await _context.Folders.Where((e) => e.IdParentFolder == f.Id).ToListAsync();
+            if (Passwords!=null)
+            {
+                foreach (Passwords p in Passwords)
+
+                {
+                    var t = await _context.GroupesPasswords.Where(GP => GP.IdPass == p.Id).ToListAsync();
+                    foreach (GroupesPasswords GP1 in t)
+                    {
+                        _context.GroupesPasswords.Remove(GP1);
+                    }
+                    _context.Passwords.Remove(p);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            if (Folders != null)
+            {
+                foreach (Folders fold in Folders)
+                {
+                    await this.DeleteFolders(fold);
+                }
+            }
             if (folders == null)
             {
                 return NotFound();
             }
 
             _context.Folders.Remove(folders);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch
+            {
+                throw;
+            }
 
-            return folders;
+            return 1;
         }
 
         private bool FoldersExists(long id)

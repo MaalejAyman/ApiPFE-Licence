@@ -116,19 +116,34 @@ namespace ApiPFE.Controllers
         }
 
         // DELETE: api/Groupes/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Groupes>> DeleteGroupes(long id)
+        [HttpPost]
+        public async Task<ActionResult<long>> DeleteGroupes(GroupesWrite g)
         {
-            var groupes = await _context.Groupes.FindAsync(id);
+            var groupes = await _context.Groupes.FindAsync(g.Id);
+            var gp = await _context.GroupesPasswords.Where((GP) => GP.IdGrp == g.Id).ToListAsync();
+            var ug = await _context.UserssGroupes.Where((UG) => UG.IdGrp == g.Id).ToListAsync();
             if (groupes == null)
             {
                 return NotFound();
             }
-
+            if (gp != null)
+            {
+                foreach(GroupesPasswords p in gp)
+                {
+                    _context.GroupesPasswords.Remove(p);
+                }
+            }
+            if (ug != null)
+            {
+                foreach (UserssGroupes u in ug)
+                {
+                    _context.UserssGroupes.Remove(u);
+                }
+            }
             _context.Groupes.Remove(groupes);
             await _context.SaveChangesAsync();
 
-            return groupes;
+            return 1;
         }
 
         private bool GroupesExists(long id)
@@ -139,14 +154,34 @@ namespace ApiPFE.Controllers
         {
             var grp = new Groupes();
             grp.Name = G.Name;
-            grp.IdUser = G.IdUser;
-            grp.IdUserNavigation = await _context.Userss.Where(g => g.Id == G.IdUser).FirstOrDefaultAsync();
             return grp;
         }
         [HttpPost]
         public async Task<ActionResult<IEnumerable<Groupes>>> GroupesByUserId(UsersWrite u)
         {
-            var t = await _context.Groupes.Where(g => g.IdUser == u.Id).ToListAsync();
+            var us = await _context.Userss.Where(usr => usr.Id == u.Id).FirstOrDefaultAsync();
+            var t1 = new List<UserssGroupes>();
+            if (us.IsAdmin == 0)
+            {
+                t1 = await _context.UserssGroupes.Where(ug => ug.IdUsr == u.Id).ToListAsync();
+            }
+            else
+            {
+                return await _context.Groupes.ToListAsync();
+            }
+            
+            var t = new List<Groupes>();
+            foreach(UserssGroupes x in t1)
+            {
+                var grp = await _context.Groupes.Where(g => g.Id == x.IdGrp).FirstAsync();
+                if (grp != null)
+                {
+                    var g = new Groupes();
+                    g.Id = grp.Id;
+                    g.Name = grp.Name;
+                    t.Add(g);
+                }
+            }
             return t;
         }
         [HttpPost]

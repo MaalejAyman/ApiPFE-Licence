@@ -20,11 +20,7 @@ namespace ApiPFE.Models
         [Required]
         [StringLength(50)]
         public string Link { get; set; }
-        public long? IdUser { get; set; }
 
-        [ForeignKey(nameof(IdUser))]
-        [InverseProperty(nameof(Userss.WebSites))]
-        public virtual Userss IdUserNavigation { get; set; }
         [InverseProperty("IdWsNavigation")]
         public virtual ICollection<Passwords> Passwords { get; set; }
     }

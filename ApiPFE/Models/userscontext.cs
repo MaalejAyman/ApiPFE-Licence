@@ -54,11 +54,6 @@ namespace ApiPFE.Models
             modelBuilder.Entity<Groupes>(entity =>
             {
                 entity.Property(e => e.Name).IsUnicode(false);
-
-                entity.HasOne(d => d.IdUserNavigation)
-                    .WithMany(p => p.Groupes)
-                    .HasForeignKey(d => d.IdUser)
-                    .HasConstraintName("UserGroupe");
             });
 
             modelBuilder.Entity<GroupesPasswords>(entity =>
@@ -112,6 +107,8 @@ namespace ApiPFE.Models
 
             modelBuilder.Entity<Userss>(entity =>
             {
+                entity.Property(e => e.IsAdmin).HasDefaultValueSql("((0))");
+
                 entity.Property(e => e.Login).IsUnicode(false);
 
                 entity.Property(e => e.Password).IsUnicode(false);
@@ -143,11 +140,6 @@ namespace ApiPFE.Models
                 entity.Property(e => e.Link).IsUnicode(false);
 
                 entity.Property(e => e.Name).IsUnicode(false);
-
-                entity.HasOne(d => d.IdUserNavigation)
-                    .WithMany(p => p.WebSites)
-                    .HasForeignKey(d => d.IdUser)
-                    .HasConstraintName("FK_WebSites_ToUserss");
             });
 
             OnModelCreatingPartial(modelBuilder);

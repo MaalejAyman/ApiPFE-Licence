@@ -120,7 +120,7 @@ namespace ApiPFE.Controllers
                     }
                 }
             }
-            return CreatedAtAction("GetPasswords", new { id = passwords.Id });
+            return CreatedAtAction("GetPasswords", new { Id = passwords.Id });
         }
         [HttpPost]
         public async Task<ActionResult<Passwords>> UpdatePasswords(PasswordsWrite pass)
@@ -199,25 +199,40 @@ namespace ApiPFE.Controllers
             return passRead;
         }
         // DELETE: api/Passwords/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Passwords>> DeletePasswords(long id)
+        [HttpPost]
+        public async Task<ActionResult<long>> DeletePasswords(PasswordsWrite p)
         {
-            var passwords = await _context.Passwords.FindAsync(id);
+            var passwords = await _context.Passwords.FindAsync(p.Id);
+            
             if (passwords == null)
             {
                 return NotFound();
             }
-
+            var t = await _context.GroupesPasswords.Where(GP => GP.IdPass == p.Id).ToListAsync();
+            foreach (GroupesPasswords GP1 in t)
+            {
+                _context.GroupesPasswords.Remove(GP1);
+            }
             _context.Passwords.Remove(passwords);
             await _context.SaveChangesAsync();
 
-            return passwords;
+            return 1;
         }
+
         [HttpPost]
         public async Task<List<PasswordsRead>> GetSharedPasswords(Userss u)
         {
             List<PasswordsRead> PRS=new List<PasswordsRead>();
-            var G = await _context.UserssGroupes.Where(g => g.IdUsr == u.Id).ToListAsync();
+            var us = await _context.Userss.Where(usr=> usr.Id == u.Id).FirstOrDefaultAsync();
+            var G = new List<UserssGroupes>();
+            if (us.IsAdmin == 0)
+            {
+                G = await _context.UserssGroupes.Where(g => g.IdUsr == u.Id).ToListAsync();
+            }
+            else
+            {
+                G = await _context.UserssGroupes.ToListAsync();
+            }
             foreach(UserssGroupes grp in G)
             {
                 var pass = await _context.GroupesPasswords.Where(p => p.IdGrp == grp.IdGrp).ToListAsync();
@@ -234,7 +249,10 @@ namespace ApiPFE.Controllers
                     pr.IdWs = p.IdWs;
                     var gr = await _context.Groupes.Where(p1 => p1.Id == Gp.IdGrp).FirstOrDefaultAsync();
                     pr.GrpName = gr.Name;
-                    PRS.Add(pr);
+                    if (pr.IdUser != u.Id)
+                    {
+                        PRS.Add(pr);
+                    }
                 }
             }
             return PRS;

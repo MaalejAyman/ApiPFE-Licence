@@ -15,10 +15,10 @@ namespace ApiPFE.Models
         [Key]
         public long Id { get; set; }
         [Required]
-        [StringLength(50)]
+        [StringLength(100)]
         public string Login { get; set; }
         [Required]
-        [StringLength(50)]
+        [StringLength(100)]
         public string Value { get; set; }
         public int? Score { get; set; }
         public long? IdGrp { get; set; }

@@ -8,6 +8,7 @@ namespace ApiPFE.Models.Write
 {
     public class FoldersWrite
     {
+        public long? Id { get; set; }
         public string Name { get; set; }
         public long? IdParentFolder { get; set; }
         public long IdUser { get; set; }

@@ -42,9 +42,9 @@ namespace ApiPFE.Controllers
             return webSites;
         }
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<WebSites>>> WebSitesByUserId(UsersWrite u)
+        public async Task<ActionResult<IEnumerable<WebSites>>> WebSitesByUserId()
         {
-            var t = await _context.WebSites.Where(WS => WS.IdUser == u.Id).ToListAsync();
+            var t = await _context.WebSites.ToListAsync();
             return t;
         }
 
@@ -104,14 +104,36 @@ namespace ApiPFE.Controllers
                 }
             }
 
-            return CreatedAtAction("GetWebSites", new { id = webSites.Id , User = webSites.IdUserNavigation.Login});
+            return CreatedAtAction("GetWebSites", new { id = webSites.Id });
+        }
+        [HttpPost]
+        public async Task<ActionResult<WebSites>> UpdateWebSites(WebSitesWrite WS)
+        {
+            var webSites = Sync(WS).Result;
+            var w = await _context.WebSites.FindAsync(WS.Id);
+            w.Name = webSites.Name;
+            w.Link = webSites.Link;
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+
+            }
+            return CreatedAtAction("GetWebSites", new { id = webSites.Id });
         }
 
         // DELETE: api/WebSites/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<WebSites>> DeleteWebSites(long id)
+        [HttpPost]
+        public async Task<ActionResult<long>> DeleteWebSites(WebSitesWrite ws)
         {
-            var webSites = await _context.WebSites.FindAsync(id);
+            var webSites = await _context.WebSites.FindAsync(ws.Id);
+            var p = await _context.Passwords.Where(pass => pass.IdWs == ws.Id).ToListAsync();
+            if (p.Count() != 0)
+            {
+                return 0;
+            }
             if (webSites == null)
             {
                 return NotFound();
@@ -120,7 +142,7 @@ namespace ApiPFE.Controllers
             _context.WebSites.Remove(webSites);
             await _context.SaveChangesAsync();
 
-            return webSites;
+            return 1;
         }
 
         private bool WebSitesExists(long id)
@@ -132,8 +154,6 @@ namespace ApiPFE.Controllers
             var webs = new WebSites();
             webs.Name = WS.Name;
             webs.Link = WS.Link;
-            webs.IdUser = WS.IdUser;
-            webs.IdUserNavigation = await _context.Userss.Where(usr => usr.Id == webs.IdUser).FirstOrDefaultAsync();
             return webs;
         }
     }

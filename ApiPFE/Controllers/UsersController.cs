@@ -124,6 +124,7 @@ namespace ApiPFE.Controllers
             usR.Id = us.Id;
             usR.Login = us.Login;
             usR.Password = us.Password;
+            usR.IsAdmin = us.IsAdmin;
             return usR;
         }
         // DELETE: api/Users/5
