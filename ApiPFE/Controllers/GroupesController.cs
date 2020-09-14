@@ -21,16 +21,14 @@ namespace ApiPFE.Controllers
             _context = context;
         }
 
-        // GET: api/Groupes
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Groupes>>> GetGroupes()
         {
             return await _context.Groupes.ToListAsync();
         }
 
-        // GET: api/Groupes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Groupes>> GetGroupes(long id)
+        public async Task<ActionResult<Groupes>> GetGroupes2(long id)
         {
             var groupes = await _context.Groupes.FindAsync(id);
 
@@ -42,41 +40,6 @@ namespace ApiPFE.Controllers
             return groupes;
         }
 
-        // PUT: api/Groupes/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutGroupes(long id, Groupes groupes)
-        {
-            if (id != groupes.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(groupes).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!GroupesExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Groupes
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         public async Task<ActionResult<Groupes>> PostGroupes(GroupesWrite grp)
         {
@@ -115,7 +78,6 @@ namespace ApiPFE.Controllers
             return CreatedAtAction("GetGroupes", new { id = groupes.Id ,Name = groupes.Name});
         }
 
-        // DELETE: api/Groupes/5
         [HttpPost]
         public async Task<ActionResult<long>> DeleteGroupes(GroupesWrite g)
         {

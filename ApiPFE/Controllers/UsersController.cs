@@ -21,8 +21,6 @@ namespace ApiPFE.Controllers
         {
             _context = context;
         }
-
-        // GET: api/Users
         [HttpPost]
         public async Task<ActionResult<IEnumerable<Userss>>> GetUsers()
         {
@@ -49,7 +47,7 @@ namespace ApiPFE.Controllers
             }
             return Ok(user);
         }
-        // GET: api/Users/5
+
         [HttpGet("{login}")]
         public async Task<ActionResult<Boolean>> CheckLogin(string login)
         {
@@ -63,41 +61,6 @@ namespace ApiPFE.Controllers
             return true;
         }
 
-        // PUT: api/Users/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(long id, Userss user)
-        {
-            if (id != user.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(user).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Users
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
          [HttpPost]
         public async Task<ActionResult<Userss>> PostUser(Userss user)
         {
@@ -110,7 +73,7 @@ namespace ApiPFE.Controllers
             fw.IdParentFolder = null;
             _context.Folders.Add(fw);
             await _context.SaveChangesAsync();
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            return Ok();
         }
         [HttpPost]
         public async Task<ActionResult<UsersRead>> UserByData(UsersWrite user)
@@ -126,21 +89,6 @@ namespace ApiPFE.Controllers
             usR.Password = us.Password;
             usR.IsAdmin = us.IsAdmin;
             return usR;
-        }
-        // DELETE: api/Users/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Userss>> DeleteUser(long id)
-        {
-            var user = await _context.Userss.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            _context.Userss.Remove(user);
-            await _context.SaveChangesAsync();
-
-            return user;
         }
 
         private bool UserExists(long id)

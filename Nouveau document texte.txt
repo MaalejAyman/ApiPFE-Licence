@@ -1,0 +1,15 @@
+    dotnet ef userscontext scaffold "Data Source=DESKTOP-FQ3INT6;Initial Catalog=ProjetPFE;Integrated Security=True" Microsoft.EntityFrameworkCore.SqlServer -force
+Scaffold-DbContext "Data Source=DESKTOP-FQ3INT6;Initial Catalog=ProjetPFE;Integrated Security=True" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Model -Context "userscontext" -DataAnnotations
+Scaffold-DbContext "Data Source=DESKTOP-FQ3INT6;Initial Catalog=ProjetPFE;Integrated Security=True" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Context "userscontext" -DataAnnotations -force
+
+
+
+
+
+
+
+npm install --save-dev @angular-devkit/build-angular
+ng g class --skip-tests
+ng g service --skip-tests
+ng g component 
+ng g module --module --routing=true

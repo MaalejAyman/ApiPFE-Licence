@@ -10,6 +10,7 @@ namespace ApiPFE.Models
         public Userss()
         {
             Folders = new HashSet<Folders>();
+            Notes = new HashSet<Notes>();
             Passwords = new HashSet<Passwords>();
             UserssGroupes = new HashSet<UserssGroupes>();
         }
@@ -27,6 +28,8 @@ namespace ApiPFE.Models
 
         [InverseProperty("IdUserNavigation")]
         public virtual ICollection<Folders> Folders { get; set; }
+        [InverseProperty("IdUserNavigation")]
+        public virtual ICollection<Notes> Notes { get; set; }
         [InverseProperty("IdUserNavigation")]
         public virtual ICollection<Passwords> Passwords { get; set; }
         [InverseProperty("IdUsrNavigation")]

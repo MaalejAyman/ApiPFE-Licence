@@ -20,14 +20,12 @@ namespace ApiPFE.Controllers
             _context = context;
         }
 
-        // GET: api/GroupesPasswords
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GroupesPasswords>>> GetGroupesPasswords()
         {
             return await _context.GroupesPasswords.ToListAsync();
         }
 
-        // GET: api/GroupesPasswords/5
         [HttpGet("{id}")]
         public async Task<ActionResult<GroupesPasswords>> GetGroupesPasswords(long id)
         {
@@ -41,52 +39,17 @@ namespace ApiPFE.Controllers
             return groupesPasswords;
         }
 
-        // PUT: api/GroupesPasswords/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutGroupesPasswords(long id, GroupesPasswords groupesPasswords)
-        {
-            if (id != groupesPasswords.IdPass)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(groupesPasswords).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!GroupesPasswordsExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/GroupesPasswords
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<GroupesPasswords>> PostGroupesPasswords(GroupesPasswords groupesPasswords)
+        public async Task<ActionResult<GroupesPasswords>> PostGroupesPasswords(GroupesPasswords gp)
         {
-            _context.GroupesPasswords.Add(groupesPasswords);
+            _context.GroupesPasswords.Add(gp);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (GroupesPasswordsExists(groupesPasswords.IdPass))
+                if (GroupesPasswordsExists(gp.IdPass))
                 {
                     return Conflict();
                 }
@@ -96,23 +59,7 @@ namespace ApiPFE.Controllers
                 }
             }
 
-            return CreatedAtAction("GetGroupesPasswords", new { id = groupesPasswords.IdPass }, groupesPasswords);
-        }
-
-        // DELETE: api/GroupesPasswords/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<GroupesPasswords>> DeleteGroupesPasswords(long id)
-        {
-            var groupesPasswords = await _context.GroupesPasswords.FindAsync(id);
-            if (groupesPasswords == null)
-            {
-                return NotFound();
-            }
-
-            _context.GroupesPasswords.Remove(groupesPasswords);
-            await _context.SaveChangesAsync();
-
-            return groupesPasswords;
+            return CreatedAtAction("GetGroupesPasswords", new { id = gp.IdPass }, gp);
         }
 
         private bool GroupesPasswordsExists(long id)

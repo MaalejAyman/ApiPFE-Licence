@@ -22,15 +22,11 @@ namespace ApiPFE.Controllers
         {
             _context = context;
         }
-
-        // GET: api/Passwords
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Passwords>>> GetPasswords()
         {
             return await _context.Passwords.ToListAsync();
         }
-
-        // GET: api/Passwords/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Passwords>> GetPasswords(long id)
         {
@@ -43,42 +39,6 @@ namespace ApiPFE.Controllers
             passwords.Id = id;
             return passwords;
         }
-
-        // PUT: api/Passwords/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPasswords(long id, Passwords passwords)
-        {
-            if (id != passwords.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(passwords).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PasswordsExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Passwords
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         public async Task<ActionResult<Passwords>> PostPasswords(PasswordsWrite pass)
         {
@@ -198,7 +158,7 @@ namespace ApiPFE.Controllers
             }
             return passRead;
         }
-        // DELETE: api/Passwords/5
+
         [HttpPost]
         public async Task<ActionResult<long>> DeletePasswords(PasswordsWrite p)
         {

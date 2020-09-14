@@ -22,14 +22,12 @@ namespace ApiPFE.Controllers
             _context = context;
         }
 
-        // GET: api/Folders
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Folders>>> GetFolders()
         {
             return await _context.Folders.ToListAsync();
         }
 
-        // GET: api/Folders/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Folders>> GetFolders(long id)
         {
@@ -43,37 +41,6 @@ namespace ApiPFE.Controllers
             return folders;
         }
 
-        // PUT: api/Folders/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutFolders(long id, Folders folders)
-        {
-            if (id != folders.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(folders).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!FoldersExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
         [HttpPost]
         public async Task<ActionResult<IEnumerable<Folders>>> FoldersByUserId(UsersWrite u)
         {
@@ -89,9 +56,6 @@ namespace ApiPFE.Controllers
         {
             return _context.Folders.ToListAsync().Result.LastOrDefault().Id;     
         }
-        // POST: api/Folders
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         public async Task<ActionResult<Folders>> PostFolders(FoldersWrite fold)
         {
@@ -103,6 +67,7 @@ namespace ApiPFE.Controllers
             }
             catch (DbUpdateException)
             {
+                
                 if (FoldersExists(folders.Id))
                 {
                     return Conflict();
@@ -113,7 +78,7 @@ namespace ApiPFE.Controllers
                 }
             }
 
-            return CreatedAtAction("GetFolders", new { Id = folders.Id , Name = folders.Name,User=folders.IdUserNavigation.Login, IdParentFolder = folders.IdParentFolder,Parent = folders.Parent});
+            return CreatedAtAction("GetFolders", new { Id = folders.Id, Name = folders.Name, User = folders.IdUserNavigation.Login, IdParentFolder = folders.IdParentFolder, Parent = folders.Parent });
         }
         [HttpPost]
         public async Task<ActionResult<long>> RenameFolders(FoldersWrite fold)
@@ -131,7 +96,22 @@ namespace ApiPFE.Controllers
 
             return 1;
         }
-        // DELETE: api/Folders/5
+        * [HttpPost]
+        public async Task<ActionResult<long>> MoveFolders(FoldersWrite fold)
+        {
+            var folders = await _context.Folders.FindAsync(fold.Id);
+            folders.IdParentFolder = fold.IdParentFolder;
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw;
+            }
+
+            return 1;
+        }
         [HttpPost]
         public async Task<ActionResult<long>> DeleteFolders(Folders f)
         {

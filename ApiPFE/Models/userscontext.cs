@@ -18,6 +18,7 @@ namespace ApiPFE.Models
         public virtual DbSet<Folders> Folders { get; set; }
         public virtual DbSet<Groupes> Groupes { get; set; }
         public virtual DbSet<GroupesPasswords> GroupesPasswords { get; set; }
+        public virtual DbSet<Notes> Notes { get; set; }
         public virtual DbSet<Passwords> Passwords { get; set; }
         public virtual DbSet<Userss> Userss { get; set; }
         public virtual DbSet<UserssGroupes> UserssGroupes { get; set; }
@@ -27,6 +28,7 @@ namespace ApiPFE.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Data Source=DESKTOP-FQ3INT6;Initial Catalog=ProjetPFE;Integrated Security=True");
             }
         }
@@ -74,6 +76,17 @@ namespace ApiPFE.Models
                     .HasForeignKey(d => d.IdPass)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_GroupesPasswords_ToPasswords");
+            });
+
+            modelBuilder.Entity<Notes>(entity =>
+            {
+                entity.Property(e => e.Text).IsUnicode(false);
+
+                entity.HasOne(d => d.IdUserNavigation)
+                    .WithMany(p => p.Notes)
+                    .HasForeignKey(d => d.IdUser)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Notes_ToUserss");
             });
 
             modelBuilder.Entity<Passwords>(entity =>
