@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\repos\\ApiPFE\\ApiPFE\\ApiPFE.csproj": {}
+    "E:\\Studies\\Project\\Projet PFE\\ApiPFE\\ApiPFE\\ApiPFE.csproj": {}
   },
   "projects": {
-    "E:\\repos\\ApiPFE\\ApiPFE\\ApiPFE.csproj": {
+    "E:\\Studies\\Project\\Projet PFE\\ApiPFE\\ApiPFE\\ApiPFE.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\repos\\ApiPFE\\ApiPFE\\ApiPFE.csproj",
+        "projectUniqueName": "E:\\Studies\\Project\\Projet PFE\\ApiPFE\\ApiPFE\\ApiPFE.csproj",
         "projectName": "ApiPFE",
-        "projectPath": "E:\\repos\\ApiPFE\\ApiPFE\\ApiPFE.csproj",
+        "projectPath": "E:\\Studies\\Project\\Projet PFE\\ApiPFE\\ApiPFE\\ApiPFE.csproj",
         "packagesPath": "C:\\Users\\Maale\\.nuget\\packages\\",
-        "outputPath": "E:\\repos\\ApiPFE\\ApiPFE\\obj\\",
+        "outputPath": "E:\\Studies\\Project\\Projet PFE\\ApiPFE\\ApiPFE\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\"
@@ -42,6 +42,10 @@
       "frameworks": {
         "netcoreapp3.1": {
           "dependencies": {
+            "IdentityServer3": {
+              "target": "Package",
+              "version": "[2.6.3, )"
+            },
             "Microsoft.AspNet.WebApi.Cors": {
               "target": "Package",
               "version": "[5.2.7, )"
@@ -66,7 +70,7 @@
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
-              "version": "[3.1.1, )"
+              "version": "[3.1.4, )"
             }
           },
           "imports": [

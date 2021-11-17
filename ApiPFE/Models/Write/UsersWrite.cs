@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ApiPFE.Models
+namespace ApiPFE.Models.Write
 {
-    public class User
+    public class UsersWrite
     {
         public long Id { get; set; }
-        public string login { get; set; }
+        public string Login { get; set; }
         public string Password { get; set; }
+        public int? IsAdmin { get; set; }
     }
 }
